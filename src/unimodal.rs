@@ -887,7 +887,7 @@ macro_rules! encodable_unsigned {
   }
 }
 
-//encodable_unsigned!(u8: 8, ENCODE_U8, DECODE_U8, ENCODE_SIMD_U8, DECODE_SIMD_U8, encode_zz_shift_u8);
+encodable_unsigned!(u8: 8, ENCODE_U8, DECODE_U8, ENCODE_SIMD_U8, DECODE_SIMD_U8, encode_zz_shift_u8);
 encodable_unsigned!(u16: 8, ENCODE_U16, DECODE_U16, ENCODE_SIMD_U16, DECODE_SIMD_U16, encode_zz_shift_u16);
 encodable_unsigned!(u32: 8, ENCODE_U32, DECODE_U32, ENCODE_SIMD_U32, DECODE_SIMD_U32, encode_zz_shift_u32);
 encodable_unsigned!(u64: 8, ENCODE_U64, DECODE_U64, ENCODE_SIMD_U64, DECODE_SIMD_U64, encode_zz_shift_u64);
@@ -2057,7 +2057,7 @@ macro_rules! access_unsigned {
   }
 }
 
-//access_unsigned!(u8: 8, DECODE_U8, DECODE_SIMD_U8);
+access_unsigned!(u8: 8, DECODE_U8, DECODE_SIMD_U8);
 access_unsigned!(u16: 8, DECODE_U16, DECODE_SIMD_U16);
 access_unsigned!(u32: 8, DECODE_U32, DECODE_SIMD_U32);
 access_unsigned!(u64: 8, DECODE_U64, DECODE_SIMD_U64);
