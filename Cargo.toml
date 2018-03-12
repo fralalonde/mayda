@@ -4,11 +4,14 @@ version = "0.2.3"
 authors = ["Jeremy Mason <jkylemason@gmail.com>"]
 license = "MIT/Apache-2.0"
 description = "Compression of integer arrays, favoring decompression speed."
-homepage = "https://github.com/harharkh/mayda"
-repository = "https://github.com/harharkh/mayda"
-documentation = "https://harharkh.github.io/mayda"
+homepage = "https://github.com/fralalonde/mayda"
+repository = "https://github.com/fralalonde/mayda"
+documentation = "https://docs.rs/crate/mayda"
 readme = "README.md"
 keywords = ["mayda", "compression"]
+
+[badges]
+travis-ci = { repository = "fralalonde/mayda", branch = "master" }
 
 [lib]
 name = "mayda"

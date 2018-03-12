@@ -1,6 +1,6 @@
 # mayda
 
-[![Build Status](https://travis-ci.org/harharkh/mayda.svg)](https://travis-ci.org/harharkh/mayda)
+[![Build Status](https://travis-ci.org/harharkh/mayda.svg)](https://travis-ci.org/fralalonde/mayda)
 [![Latest Version](https://img.shields.io/crates/v/mayda.svg)](https://crates.io/crates/mayda)
 ![Works on nightly](https://img.shields.io/badge/works%20on-nightly-lightgrey.svg)
 
@@ -187,7 +187,8 @@ be dual licensed as above, without any additional terms or conditions.
 
 ### Contributors
 
-Francis Lalonde
+[Jeremy Mason](https://github.com/harharkh) - original author
+[Francis Lalonde](https://github.com/fralalonde) - current maintainer
 
 [//]: #
    [`Uniform`]: <https://harharkh.github.io/mayda/mayda/uniform/index.html>
