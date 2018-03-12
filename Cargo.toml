@@ -18,6 +18,7 @@ name = "mayda"
 
 [dependencies]
 mayda_codec = { path = "mayda_codec", version = "0.1" }
+bencher = "0.1.4"
 
 [dev-dependencies]
 num = "0.1"

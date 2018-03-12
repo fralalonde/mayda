@@ -323,10 +323,10 @@ impl<B: Bits> EncodePrivate<B> for Monotone<B> {
 }
 
 macro_rules! encodable_unsigned {
-  ($(($ty: ident: $step: expr,
+  ($ty: ident: $step: expr,
       $enc: ident, $dec: ident,
       $enc_simd: ident, $dec_simd: ident,
-      $enc_delta: ident))*) => ($(
+      $enc_delta: ident) => {
     impl EncodePrivate<$ty> for Monotone<$ty> {
       unsafe fn _encode(input: &[$ty]) -> Result<Vec<u32>, super::Error> {
         // Nothing to do
@@ -752,27 +752,29 @@ macro_rules! encodable_unsigned {
         if s_bits < 32 { s_ptr.offset(1) } else { s_ptr }
       }
     }
-  )*)
+  }
 }
 
-encodable_unsigned!{
-  (u8: 8,
+encodable_unsigned!(u8: 8,
    ENCODE_U8, DECODE_U8,
    ENCODE_SIMD_U8, DECODE_SIMD_U8,
-   encode_delta_u8)
-  (u16: 8,
+   encode_delta_u8);
+
+encodable_unsigned!(u16: 8,
    ENCODE_U16, DECODE_U16,
    ENCODE_SIMD_U16, DECODE_SIMD_U16,
-   encode_delta_u16)
-  (u32: 8,
+   encode_delta_u16);
+
+encodable_unsigned!(u32: 8,
    ENCODE_U32, DECODE_U32,
    ENCODE_SIMD_U32, DECODE_SIMD_U32,
-   encode_delta_u32)
-  (u64: 8,
+   encode_delta_u32);
+
+encodable_unsigned!(u64: 8,
    ENCODE_U64, DECODE_U64,
    ENCODE_SIMD_U64, DECODE_SIMD_U64,
-   encode_delta_u64)
-}
+   encode_delta_u64);
+
 
 #[cfg(target_pointer_width = "16")]
 impl EncodePrivate<usize> for Monotone<usize> {
@@ -814,7 +816,7 @@ impl EncodePrivate<usize> for Monotone<usize> {
 }
 
 macro_rules! encodable_signed {
-  ($(($it: ident: $ut: ident, $enc_delta: ident))*) => ($(
+  ($it: ident: $ut: ident, $enc_delta: ident) => {
     impl EncodePrivate<$it> for Monotone<$it> {
       unsafe fn _encode(input: &[$it]) -> Result<Vec<u32>, super::Error> {
         // Nothing to do
@@ -959,15 +961,13 @@ macro_rules! encodable_signed {
         Monotone::<$ut>::_decode(storage, n_blks, mem::transmute(output))
       }
     }
-  )*)
+  }
 }
 
-encodable_signed!{
-  (i8: u8, encode_delta_u8)
-  (i16: u16, encode_delta_u16)
-  (i32: u32, encode_delta_u32)
-  (i64: u64, encode_delta_u64)
-}
+encodable_signed!(i8: u8, encode_delta_u8);
+encodable_signed!(i16: u16, encode_delta_u16);
+encodable_signed!(i32: u32, encode_delta_u32);
+encodable_signed!(i64: u64, encode_delta_u64);
 
 #[cfg(target_pointer_width = "16")]
 impl EncodePrivate<isize> for Monotone<isize> {
@@ -1349,7 +1349,7 @@ fn words_to_block(n_blks: usize, blk: usize, ty_wd: u32, s_head: *const u32) -> 
 }
 
 macro_rules! access_unsigned {
-  ($(($ty: ident: $step: expr, $dec: ident, $dec_simd: ident))*) => ($(
+  ($ty: ident: $step: expr, $dec: ident, $dec_simd: ident) => {
     impl AccessOne<$ty> for Monotone<$ty> {
       unsafe fn _access_one(storage: &[u32], index: usize) -> $ty {
         if storage.is_empty() {
@@ -1660,18 +1660,16 @@ macro_rules! access_unsigned {
         }
       }
     }
-  )*)
+  }
 }
 
-access_unsigned!{
-  (u8: 8, DECODE_U8, DECODE_SIMD_U8)
-  (u16: 8, DECODE_U16, DECODE_SIMD_U16)
-  (u32: 8, DECODE_U32, DECODE_SIMD_U32)
-  (u64: 8, DECODE_U64, DECODE_SIMD_U64)
-}
+access_unsigned!(u8: 8, DECODE_U8, DECODE_SIMD_U8);
+access_unsigned!(u16: 8, DECODE_U16, DECODE_SIMD_U16);
+access_unsigned!(u32: 8, DECODE_U32, DECODE_SIMD_U32);
+access_unsigned!(u64: 8, DECODE_U64, DECODE_SIMD_U64);
 
 macro_rules! access_signed {
-  ($(($it: ident, $ut: ident))*) => ($(
+  ($it: ident, $ut: ident) => {
     impl AccessOne<$it> for Monotone<$it> {
       #[inline]
       unsafe fn _access_one(storage: &[u32], index: usize) -> $it {
@@ -1694,30 +1692,25 @@ macro_rules! access_signed {
         Monotone::<$ut>::_access_many(storage, n_blks, range, mem::transmute(output))
       }
     }
-  )*)
+  }
 }
 
-access_signed!{
-  (i8, u8)
-  (i16, u16)
-  (i32, u32)
-  (i64, u64)
-}
+access_signed!(i8, u8);
+access_signed!(i16, u16);
+access_signed!(i32, u32);
+access_signed!(i64, u64);
 
 #[cfg(target_pointer_width = "16")]
-access_signed!{
-  (usize, u16)
-  (isize, u16)
-}
+access_signed!(usize, u16);
+#[cfg(target_pointer_width = "16")]
+access_signed!(isize, u16);
 
 #[cfg(target_pointer_width = "32")]
-access_signed!{
-  (usize, u32)
-  (isize, u32)
-}
+access_signed!(usize, u32);
+#[cfg(target_pointer_width = "32")]
+access_signed!(isize, u32);
 
 #[cfg(target_pointer_width = "64")]
-access_signed!{
-  (usize, u64)
-  (isize, u64)
-}
+access_signed!(usize, u64);
+#[cfg(target_pointer_width = "64")]
+access_signed!(isize, u64);

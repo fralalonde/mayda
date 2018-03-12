@@ -10,7 +10,7 @@
 //! syntax extensions of `mayda_macros` to a separate compilation unit. More
 //! extensive documentation is provided in the `mayda_macros` crate.
 
-#![feature(plugin)]
+#![feature(plugin, stdsimd)]
 #![plugin(mayda_macros)]
 
 #![allow(unused_mut)]
@@ -18,18 +18,16 @@
 extern crate simd;
 
 macro_rules! codec {
-  ($(($width: expr, $step: expr, $simd: path))*) => ($(
-    encode!($width, $step);
-    decode!($width, $step);
-    encode_simd!($width, $simd);
-    decode_simd!($width, $simd);
-    encode_util!($width, $simd);
-  )*)
+    ($width: expr, $step: expr, $simd: path) => (
+        encode!($width, $step);
+        decode!($width, $step);
+        encode_simd!($width, $simd);
+        decode_simd!($width, $simd);
+        encode_util!($width, $simd);
+    )
 }
 
-codec!{
-  (8, 8, simd)
-  (16, 8, simd)
-  (32, 8, simd)
-  (64, 8, simd::x86::sse2)
-}
+codec!(8, 8, simd);
+codec!(16, 8, simd);
+codec!(32, 8, simd);
+codec!(64, 8, simd::x86::sse2);
