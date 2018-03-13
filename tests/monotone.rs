@@ -6,7 +6,6 @@
 // copied, modified, or distributed except according to those terms.
 
 #![feature(inclusive_range_syntax)]
-
 #![allow(non_snake_case)]
 
 extern crate mayda;
@@ -14,18 +13,20 @@ extern crate rand;
 
 use mayda::{Access, AccessInto, Encode, Monotone};
 use rand::distributions::{IndependentSample, Range};
-use std::{u8, u16, u32, u64, usize, i8, i16, i32, i64, isize};
+use std::{isize, usize, i16, i32, i64, i8, u16, u32, u64, u8};
 
 fn rand_increasing<T>(min: T, max: T, length: usize) -> Vec<T>
-  where T: Ord + rand::distributions::range::SampleRange {
-  let mut output: Vec<T> = Vec::with_capacity(length);
-  let val = Range::new(min, max);
-  let mut rng = rand::thread_rng();
-  for _ in 0..length {
-    output.push(val.ind_sample(&mut rng));
-  }
-  output.sort();
-  output
+where
+    T: Ord + rand::distributions::range::SampleRange,
+{
+    let mut output: Vec<T> = Vec::with_capacity(length);
+    let val = Range::new(min, max);
+    let mut rng = rand::thread_rng();
+    for _ in 0..length {
+        output.push(val.ind_sample(&mut rng));
+    }
+    output.sort();
+    output
 }
 
 macro_rules! random_values {

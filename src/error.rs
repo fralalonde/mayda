@@ -15,24 +15,26 @@ use std::fmt;
 /// The `mayda::Error` type.
 #[derive(Debug)]
 pub struct Error {
-  message: String
+    message: String,
 }
 
 impl Error {
-  /// Creates an empty Error object.
-  pub fn new(s: &str) -> Error {
-    Error {
-      message: s.to_string()
+    /// Creates an empty Error object.
+    pub fn new(s: &str) -> Error {
+        Error {
+            message: s.to_string(),
+        }
     }
-  }
 }
 
 impl error::Error for Error {
-  fn description(&self) -> &str { &self.message }
+    fn description(&self) -> &str {
+        &self.message
+    }
 }
 
 impl fmt::Display for Error {
-  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    write!(f, "{}", self.message)
-  }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
 }

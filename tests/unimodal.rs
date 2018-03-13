@@ -6,7 +6,6 @@
 // copied, modified, or distributed except according to those terms.
 
 #![feature(inclusive_range_syntax)]
-
 #![allow(non_snake_case)]
 
 extern crate mayda;
@@ -15,28 +14,26 @@ extern crate rand;
 
 use mayda::{Access, AccessInto, Encode, Unimodal};
 use num::{Bounded, FromPrimitive, ToPrimitive};
-use rand::distributions::{IndependentSample, Range, Normal};
+use rand::distributions::{IndependentSample, Normal, Range};
 
 fn rand_outliers<T>(mean: T, std_dev: T, length: usize) -> Vec<T>
-  where T: PartialOrd +
-           Bounded +
-           FromPrimitive +
-           ToPrimitive +
-           rand::distributions::range::SampleRange {
-  let mut output: Vec<T> = Vec::with_capacity(length);
-  if length > 0 {
-    let val = Normal::new(mean.to_f64().unwrap(), std_dev.to_f64().unwrap());
-    let mut rng = rand::thread_rng();
-    for _ in 0..length {
-      output.push(FromPrimitive::from_f64(val.ind_sample(&mut rng)).unwrap());
+where
+    T: PartialOrd + Bounded + FromPrimitive + ToPrimitive + rand::distributions::range::SampleRange,
+{
+    let mut output: Vec<T> = Vec::with_capacity(length);
+    if length > 0 {
+        let val = Normal::new(mean.to_f64().unwrap(), std_dev.to_f64().unwrap());
+        let mut rng = rand::thread_rng();
+        for _ in 0..length {
+            output.push(FromPrimitive::from_f64(val.ind_sample(&mut rng)).unwrap());
+        }
+        let idx = Range::new(0, length);
+        let val = Range::new(Bounded::min_value(), Bounded::max_value());
+        for _ in 0..(length / 16) {
+            output[idx.ind_sample(&mut rng)] = val.ind_sample(&mut rng);
+        }
     }
-    let idx = Range::new(0, length);
-    let val = Range::new(Bounded::min_value(), Bounded::max_value());
-    for _ in 0..(length / 16) {
-      output[idx.ind_sample(&mut rng)] = val.ind_sample(&mut rng);
-    }
-  }
-  output
+    output
 }
 
 macro_rules! random_values {

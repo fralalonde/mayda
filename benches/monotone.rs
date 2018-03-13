@@ -6,7 +6,6 @@
 // copied, modified, or distributed except according to those terms.
 
 #![feature(test)]
-
 #![allow(non_snake_case)]
 
 extern crate mayda;
@@ -15,19 +14,21 @@ extern crate test;
 
 use mayda::{Access, AccessInto, Encode, Monotone};
 use rand::distributions::{IndependentSample, Range};
-use std::{u8, u16, u32, u64, i8, i16, i32, i64};
+use std::{i16, i32, i64, i8, u16, u32, u64, u8};
 use test::Bencher;
 
 fn rand_increasing<T>(min: T, max: T, length: usize) -> Vec<T>
-  where T: Ord + rand::distributions::range::SampleRange {
-  let mut output: Vec<T> = Vec::with_capacity(length);
-  let val = Range::new(min, max);
-  let mut rng = rand::thread_rng();
-  for _ in 0..length {
-    output.push(val.ind_sample(&mut rng));
-  }
-  output.sort();
-  output
+where
+    T: Ord + rand::distributions::range::SampleRange,
+{
+    let mut output: Vec<T> = Vec::with_capacity(length);
+    let val = Range::new(min, max);
+    let mut rng = rand::thread_rng();
+    for _ in 0..length {
+        output.push(val.ind_sample(&mut rng));
+    }
+    output.sort();
+    output
 }
 
 macro_rules! encode_bench {
@@ -82,7 +83,7 @@ macro_rules! decode_bench {
       assert_eq!(input, output);
     }
   )*)
-} 
+}
 
 decode_bench!{
   (u32: 0, u32::MAX, 15, de_u32_0_MAX_15)

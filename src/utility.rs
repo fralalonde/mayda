@@ -25,12 +25,12 @@ pub const U64_FLAG: u32 = 0x00000003;
 /// Intended to be implemented only for the primitive integer types. Mainly
 /// used as a bound on the `Encode` trait.
 pub trait Bits {
-  /// Number of bits in the standard representation.
-  fn width() -> u32;
+    /// Number of bits in the standard representation.
+    fn width() -> u32;
 
-  /// Number of bits required to represent the number in binary. Notice that
-  /// `0.bits() == 0u32` intentionally.
-  fn bits(&self) -> u32;
+    /// Number of bits required to represent the number in binary. Notice that
+    /// `0.bits() == 0u32` intentionally.
+    fn bits(&self) -> u32;
 }
 
 macro_rules! bits_impl {
@@ -65,26 +65,26 @@ bits_impl!{
 /// This should not happen unless the user implements `Bits` for some other
 /// type or there is a library bug.
 pub trait Encode<B: Bits> {
-  /// Encodes the slice into the `Encode` object.
-  ///
-  /// # Errors
-  ///
-  /// By convention, returns an error if the input slice contains more than the
-  /// supported number of entries (currently 2<sup>37</sup> - 2<sup>7</sup>).
-  fn encode(&mut self, &[B]) -> Result<(), super::Error>;
+    /// Encodes the slice into the `Encode` object.
+    ///
+    /// # Errors
+    ///
+    /// By convention, returns an error if the input slice contains more than the
+    /// supported number of entries (currently 2<sup>37</sup> - 2<sup>7</sup>).
+    fn encode(&mut self, &[B]) -> Result<(), super::Error>;
 
-  /// Decodes the contents of the `Encode` object. Returns a vector because
-  /// ownership of the returned value must be given to the caller.
-  fn decode(&self) -> Vec<B>;
+    /// Decodes the contents of the `Encode` object. Returns a vector because
+    /// ownership of the returned value must be given to the caller.
+    fn decode(&self) -> Vec<B>;
 
-  /// Decodes the contents of the `Encode` object and writes the result into
-  /// the slice provided. More efficient than `decode` if the slice is already
-  /// allocated. Returns the number of decoded entries.
-  ///
-  /// # Panics
-  ///
-  /// By convention, panics if the slice is of insufficient length.
-  fn decode_into(&self, &mut [B]) -> usize;
+    /// Decodes the contents of the `Encode` object and writes the result into
+    /// the slice provided. More efficient than `decode` if the slice is already
+    /// allocated. Returns the number of decoded entries.
+    ///
+    /// # Panics
+    ///
+    /// By convention, panics if the slice is of insufficient length.
+    fn decode_into(&self, &mut [B]) -> usize;
 }
 
 /// A trait for indexing an encoded vector. Similar to but less convenient than
@@ -99,11 +99,11 @@ pub trait Encode<B: Bits> {
 /// available specialization for the type. This should not happen unless there
 /// is a library bug.
 pub trait Access<Idx> {
-  /// The type returned by the access operation.
-  type Output;
+    /// The type returned by the access operation.
+    type Output;
 
-  /// The method for the access `foo.access(bar)` operation.
-  fn access(&self, Idx) -> Self::Output;
+    /// The method for the access `foo.access(bar)` operation.
+    fn access(&self, Idx) -> Self::Output;
 }
 
 /// A trait for indexing a range of an encoded vector. Writes the result into
@@ -118,8 +118,8 @@ pub trait Access<Idx> {
 /// is no available specialization for the type. This should not happen unless
 /// there is a library bug.
 pub trait AccessInto<Idx, B: Bits>: Access<Idx> {
-  /// The method for the access `foo.access_into(bar, slice)` operation.
-  fn access_into(&self, Idx, &mut [B]) -> usize;
+    /// The method for the access `foo.access_into(bar, slice)` operation.
+    fn access_into(&self, Idx, &mut [B]) -> usize;
 }
 
 /// Returns number of words required to store the given number of bits. A word
@@ -136,13 +136,13 @@ pub trait AccessInto<Idx, B: Bits>: Access<Idx> {
 /// ```
 /// use std::mem;
 /// use mayda::utility::words_for_bits;
-/// 
+///
 /// let words = words_for_bits(13 * (mem::size_of::<u8>() * 8) as u32);
 /// assert_eq!(4, words);
 /// ```
 #[inline]
 pub fn words_for_bits(bits: u32) -> usize {
-  ((bits + 31) >> 5) as usize
+    ((bits + 31) >> 5) as usize
 }
 
 /// A modified version of the Floyd-Rivest algorithm with fewer comparisions
@@ -166,44 +166,58 @@ pub fn words_for_bits(bits: u32) -> usize {
 /// assert_eq!(4, med);
 /// ```
 pub fn select_m<T: Copy + Ord>(array: &mut [T], k: usize) -> T {
-  unsafe {
-    let k: *mut T = array.as_mut_ptr().offset(k as isize);
-    let mut l: *mut T = array.as_mut_ptr();
-    let mut r: *mut T = array.as_mut_ptr().offset(array.len() as isize - 1);
+    unsafe {
+        let k: *mut T = array.as_mut_ptr().offset(k as isize);
+        let mut l: *mut T = array.as_mut_ptr();
+        let mut r: *mut T = array.as_mut_ptr().offset(array.len() as isize - 1);
 
-    while (l as usize) < (r as usize) {
-      // Median of three
-      if *k < *l { mem::swap(&mut *l, &mut *k); }
-      if *k < *r { mem::swap(&mut *k, &mut *r); }
-      if *r < *l { mem::swap(&mut *r, &mut *l); }
+        while (l as usize) < (r as usize) {
+            // Median of three
+            if *k < *l {
+                mem::swap(&mut *l, &mut *k);
+            }
+            if *k < *r {
+                mem::swap(&mut *k, &mut *r);
+            }
+            if *r < *l {
+                mem::swap(&mut *r, &mut *l);
+            }
 
-      // Median value is on the right
-      let t: T = *r;
+            // Median value is on the right
+            let t: T = *r;
 
-      let mut i: *mut T = l.offset(1);
-      let mut j: *mut T = r.offset(-1);
-      while *i < t { i = i.offset(1); }
-      while *j > t { j = j.offset(-1); }
+            let mut i: *mut T = l.offset(1);
+            let mut j: *mut T = r.offset(-1);
+            while *i < t {
+                i = i.offset(1);
+            }
+            while *j > t {
+                j = j.offset(-1);
+            }
 
-      while (i as usize) < (j as usize) {
-        mem::swap(&mut *i, &mut *j);
-        i = i.offset(1);
-        j = j.offset(-1);
-        while *i < t { i = i.offset(1); }
-        while *j > t { j = j.offset(-1); }
-      }
+            while (i as usize) < (j as usize) {
+                mem::swap(&mut *i, &mut *j);
+                i = i.offset(1);
+                j = j.offset(-1);
+                while *i < t {
+                    i = i.offset(1);
+                }
+                while *j > t {
+                    j = j.offset(-1);
+                }
+            }
 
-      // Move pivot to sorted positon
-      j = j.offset(1);
-      mem::swap(&mut *j, &mut *r);
+            // Move pivot to sorted positon
+            j = j.offset(1);
+            mem::swap(&mut *j, &mut *r);
 
-      if (j as usize) <= (k as usize) {
-        l = j.offset(1);
-      }
-      if (k as usize) <= (j as usize) {
-        r = j.offset(-1);
-      }
+            if (j as usize) <= (k as usize) {
+                l = j.offset(1);
+            }
+            if (k as usize) <= (j as usize) {
+                r = j.offset(-1);
+            }
+        }
+        *k
     }
-    *k
-  }
 }

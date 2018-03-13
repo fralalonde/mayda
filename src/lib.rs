@@ -10,7 +10,7 @@
 //! to index the compressed array over the compression ratio, on the principle
 //! that the runtime penalty for using compressed arrays should be as small as
 //! possible.
-//! 
+//!
 //! This crate provides three variations on a single compression algorithm. The
 //! `Uniform` type can decompress around six billion `u32`s per second, or 24
 //! GiB/s of decompressed integers, on a 2.6 GHz Intel Core i7-6700HQ processor
@@ -20,7 +20,7 @@
 //! comparable to the fastest (known) libraries in any language.
 //!
 //! # Usage
-//! 
+//!
 //! Add this to your `Cargo.toml`:
 //!
 //! ```toml
@@ -33,7 +33,7 @@
 //! ```rust
 //! extern crate mayda;
 //! ```
-//! 
+//!
 //! # Example: encoding and decoding
 //!
 //! The `Uniform` struct is recommended for general purpose integer compression.
@@ -42,41 +42,41 @@
 //! ```rust
 //! use std::mem;
 //! use mayda::{Uniform, Encode};
-//! 
+//!
 //! // Integers in some interval of length 255, require one byte per integer
 //! let input: Vec<u32> = (0..128).map(|x| (x * 73) % 181 + 307).collect();
-//! 
+//!
 //! let mut uniform = Uniform::new();
 //! uniform.encode(&input).unwrap();
-//! 
+//!
 //! let i_bytes = std::mem::size_of_val(input.as_slice());
 //! let u_bytes = std::mem::size_of_val(uniform.storage());
-//! 
+//!
 //! // 128 bytes for encoded entries, 12 bytes of overhead
 //! assert_eq!(i_bytes, 512);
 //! assert_eq!(u_bytes, 140);
-//! 
+//!
 //! let output: Vec<u32> = uniform.decode();
 //! assert_eq!(input, output);
 //! ```
 //!
 //! # Example: indexing
-//! 
+//!
 //! Use the `Access` or `AccessInto` traits to index the compressed array. This
 //! is similar to `Index`, but returns a vector instead of a slice.
 //!
 //! ```rust
 //! use mayda::{Uniform, Encode, Access};
-//! 
+//!
 //! // All primitive integer types supported
 //! let input: Vec<i16> = (-64..64).collect();
-//! 
+//!
 //! let mut uniform = Uniform::new();
 //! uniform.encode(&input).unwrap();
-//! 
+//!
 //! let val: i16 = uniform.access(64);
 //! assert_eq!(val, 0);
-//! 
+//!
 //! // Vector is returned to give ownership to the caller
 //! let range: Vec<i16> = uniform.access(..10);
 //! assert_eq!(range, (-64..-54).collect::<Vec<_>>());
@@ -108,7 +108,7 @@
 //! The `Monotone` type is specifically intended for arrays with monotone
 //! increasing entries. A blocks of entries is transformed into an offset and
 //! an array of differences of successive entries, and the array of differences
-//! is encoded by the approach above. The compression depends only on the 
+//! is encoded by the approach above. The compression depends only on the
 //! largest entry in the difference array.
 //!
 //! The `Unimodal` type performs the most extensive transformations and offers
