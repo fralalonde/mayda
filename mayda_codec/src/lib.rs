@@ -15,7 +15,7 @@
 
 #![allow(unused_mut)]
 
-extern crate simd;
+use std::simd;
 
 macro_rules! codec {
     ($width: expr, $step: expr, $simd: path) => (
@@ -30,4 +30,5 @@ macro_rules! codec {
 codec!(8, 8, simd);
 codec!(16, 8, simd);
 codec!(32, 8, simd);
-codec!(64, 8, simd::x86::sse2);
+codec!(64, 8, simd);
+

@@ -1,6 +1,6 @@
 [package]
 name = "mayda"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Jeremy Mason <jkylemason@gmail.com>"]
 license = "MIT/Apache-2.0"
 description = "Compression of integer arrays, favoring decompression speed."
@@ -18,10 +18,13 @@ name = "mayda"
 
 [dependencies]
 mayda_codec = { path = "mayda_codec", version = "0.1" }
-bencher = "0.1.4"
+
+[features]
+bench = []
 
 [dev-dependencies]
 num = "0.1"
 quickcheck = "0.6"
 quickcheck_macros = "0.6"
 rand = "0.4"
+bencher = "0.1.4"
