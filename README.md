@@ -17,9 +17,6 @@ at a little less than half the speed, but can have much better compression
 ratios depending on the distribution of the integers. Overall performance is
 comparable to the fastest (known) libraries in any language.
 
-Compiling `mayda` requires a **nightly** compiler and CPU support for the SSE2
-instruction set (any Intel or AMD processor manufactured after 2003). The
-compiler version is further specified in `./rust-toolchain` for reproducibility.
 The basic approach is described in [Zukowski2006] and [Lemire2015].
 
 ### Documentation

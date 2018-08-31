@@ -11,6 +11,3 @@ keywords = ["mayda", "compression"]
 
 [lib]
 name = "mayda_codec"
-
-[dependencies]
-mayda_macros = { path = "../mayda_macros", version = "0.1" }
