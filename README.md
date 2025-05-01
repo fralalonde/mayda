@@ -1,8 +1,13 @@
-# mayda
+# ANCIENT CODE WARNING
 
-[![Build Status](https://travis-ci.org/harharkh/mayda.svg)](https://travis-ci.org/fralalonde/mayda)
-[![Latest Version](https://img.shields.io/crates/v/mayda.svg)](https://crates.io/crates/mayda)
-![Works on nightly](https://img.shields.io/badge/works%20on-nightly-lightgrey.svg)
+This project requires a specific **VERY VERY OLD RUST NIGHTLY VERSION** as it relies on pre-stable procmacros.
+The design went around old Rust limitations that have since been addressed (const generics, stable SIMD).
+Hence it doesn't make sense to try and port it to new Rust since modern alternatives now exist:
+
+- [bitpacking](https://github.com/quickwit-oss/bitpacking)
+- [fastpfor-rs](https://github.com/fast-pack/FastPFOR-rs)
+
+# mayda
 
 `mayda` is a Rust library to compress integer arrays (all primitive integer
 types are supported). The design favors decompression speed and the ability to
@@ -188,7 +193,7 @@ be dual licensed as above, without any additional terms or conditions.
 ### Contributors
 
 [Jeremy Mason](https://github.com/harharkh) - original author
-[Francis Lalonde](https://github.com/fralalonde) - current maintainer
+[Francis Lalonde](https://github.com/fralalonde) - last maintainer
 
 [//]: #
    [`Uniform`]: <https://harharkh.github.io/mayda/mayda/uniform/index.html>
